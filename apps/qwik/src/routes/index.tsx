@@ -201,7 +201,7 @@ export const head: DocumentHead = {
   meta: [
     {
       name: "description",
-      content: "A Demo built with Qwik and Dall·e.",
+      content: "A Demo built with Qwik and DALL·E.",
     },
   ],
 };

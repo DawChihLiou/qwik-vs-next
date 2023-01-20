@@ -8,6 +8,7 @@ export default component$(() => {
         <a
           href="https://dawchihliou.github.io"
           target="_blank"
+          rel="noreferrer"
           class="underline decoration-dashed decoration-cyan-400"
         >
           Daw-Chih Liou
