@@ -14,9 +14,10 @@ export default component$(({ media, user, text }: CardProps) => {
         <img
           // @ts-ignore typing error in `twitter-api-sdk`
           src={media?.url}
-          alt={media?.media_key}
+          alt="Twitter media"
           width={media?.width}
           height={media?.height}
+          loading="lazy"
         />
       </figure>
       <div class="card-body">
@@ -33,7 +34,7 @@ export default component$(({ media, user, text }: CardProps) => {
             >
               {user?.name}
             </a>
-            <p class="text-sm text-slate-500">@{user?.username}</p>
+            <p class="text-sm text-slate-400">@{user?.username}</p>
           </div>
         </div>
         <p>{text}</p>
