@@ -11,7 +11,7 @@ export const images = {
       url: "https://i.picsum.photos/id/788/256/256.jpg?hmac=73kLnXxbjX5zzGdkEHCEmc_Xku2o9y84c-OugcRFITQ",
     },
     {
-      url: "https://i.picsum.photos/id/788/256/256.jpg?hmac=73kLnXxbjX5zzGdkEHCEmc_Xku2o9y84c-OugcRFITQ",
+      url: "https://i.picsum.photos/id/257/256/256.jpg?hmac=006os-uXfVQ_H05ADNLMX2gwA20hcGYF95MJmxbeU8o",
     },
     {
       url: "https://i.picsum.photos/id/507/256/256.jpg?hmac=Cp4XoZm5uZyUDFossatUs4DMLHcCMLiNb01zZZHwF84",

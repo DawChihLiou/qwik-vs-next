@@ -2,15 +2,6 @@
 const nextConfig = {
   reactStrictMode: true,
 
-  images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "pbs.twimg.com",
-      },
-    ],
-  },
-
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,

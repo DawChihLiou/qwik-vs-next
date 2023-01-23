@@ -1,4 +1,5 @@
-import Image from "next/image";
+/* eslint-disable @next/next/no-img-element */
+
 import { components } from "twitter-api-sdk/dist/types";
 
 interface CardProps {
@@ -10,25 +11,28 @@ interface CardProps {
 export default function Card({ media, user, text }: CardProps) {
   return (
     <div className="card w-80 bg-base-100 shadow-xl flex-none">
-      <figure>
-        <Image
-          // @ts-ignore typing error in `twitter-api-sdk`
-          src={media?.url}
-          alt="Twitter media"
-          width={media?.width}
-          height={media?.height}
-          loading="lazy"
-        />
-      </figure>
+      {media && (
+        <figure>
+          <img
+            // @ts-ignore typing error in `twitter-api-sdk`
+            src={media?.url}
+            alt="Twitter media"
+            width={media?.width}
+            height={media?.height}
+            loading="lazy"
+          />
+        </figure>
+      )}
       <div className="card-body">
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-center">
           <div className="avatar">
-            <div className="w-16 rounded-full">
-              <Image
+            <div className="w-12 rounded-full">
+              <img
                 src={user?.profile_image_url ?? ""}
                 alt={user?.username ?? "Avatar"}
                 width={24}
                 height={24}
+                loading="lazy"
               />
             </div>
           </div>
