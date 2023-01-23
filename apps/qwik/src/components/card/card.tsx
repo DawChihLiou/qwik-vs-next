@@ -10,16 +10,18 @@ interface CardProps {
 export default component$(({ media, user, text }: CardProps) => {
   return (
     <div class="card w-80 bg-base-100 shadow-xl flex-none">
-      <figure>
-        <img
-          // @ts-ignore typing error in `twitter-api-sdk`
-          src={media?.url}
-          alt="Twitter media"
-          width={media?.width}
-          height={media?.height}
-          loading="lazy"
-        />
-      </figure>
+      {media && (
+        <figure>
+          <img
+            // @ts-ignore typing error in `twitter-api-sdk`
+            src={media?.url}
+            alt="Twitter media"
+            width={media?.width}
+            height={media?.height}
+            loading="lazy"
+          />
+        </figure>
+      )}
       <div class="card-body">
         <div class="flex gap-2">
           <div class="avatar">

@@ -17,7 +17,7 @@ interface ImageData {
 
 export async function fetchImages(
   term: string,
-  controller: AbortController
+  controller?: AbortController
 ): Promise<ImageData> {
   const response = await fetch(`http://localhost:5173/images`, {
     signal: controller?.signal,
@@ -103,7 +103,7 @@ export default component$(() => {
             <textarea
               rows={5}
               placeholder="Enter your prompt and press ⌘ ⏎ to create images✍️"
-              class="mx-auto mt-1 block w-full px-3 py-2 rounded-md shadow-lg bg-slate-700 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500"
+              class="textarea textarea-bordered w-full"
               value={query.term}
               onKeyDown$={(e) => {
                 if (e.key === "Enter" && e.metaKey) {
@@ -111,13 +111,58 @@ export default component$(() => {
                 }
               }}
             />
+            <label class="label">
+              <span class="label-text-alt" />
+              <span class="label-text-alt">
+                {"Press "}
+                <kbd class="kbd">⌘</kbd> <kbd class="kbd">⏎</kbd>
+                {" to create images."}
+              </span>
+            </label>
+          </div>
+          <div class="lg:hidden mb-8 carousel space-x-4 rounded-box">
+            <Resource
+              value={imageResource}
+              onPending={() => (
+                <>
+                  {Array.from("123456789").map((v) => (
+                    <div key={v} class="animate-pulse carousel-item">
+                      <div class="rounded-box bg-slate-700 h-48 w-48"></div>
+                    </div>
+                  ))}
+                </>
+              )}
+              onResolved={(images) => (
+                <>
+                  {images.data?.map(({ url }) => (
+                    <div key={url} class="carousel-item">
+                      <img
+                        src={url}
+                        alt="AI image created by DALL·E"
+                        loading="lazy"
+                        width="256"
+                        height="256"
+                        className="rounded-box"
+                      />
+                    </div>
+                  ))}
+                </>
+              )}
+            />
           </div>
           <div class="mb-8">
-            <div class="flex flex-nowrap lg:flex-none lg:grid lg:grid-cols-3 lg:grid-rows-3 gap-4 justify-start overflow-x-auto pb-4 min-h-full items-center">
+            <div class="hidden lg:grid grid-cols-3 grid-rows-3 gap-4 justify-start overflow-x-auto pb-4 items-center">
               <Resource
                 value={imageResource}
-                onPending={() => <div>Loading...</div>}
-                onRejected={(reason) => <div>Error: {reason}</div>}
+                onPending={() => (
+                  <>
+                    {Array.from("123456789").map((v) => (
+                      <div key={v} class="animate-pulse flex gap-4">
+                        <div class="rounded bg-slate-700 h-48 w-full"></div>
+                      </div>
+                    ))}
+                  </>
+                )}
                 onResolved={(images) => (
                   <>
                     {images.data?.map(({ url }) => (
@@ -125,7 +170,7 @@ export default component$(() => {
                         src={url}
                         alt="AI image created by DALL·E"
                         loading="lazy"
-                        class="rounded w-48"
+                        class="rounded"
                         width="256"
                         height="256"
                       />
@@ -137,11 +182,9 @@ export default component$(() => {
           </div>
           <div class="w-full overflow-x-hidden">
             <h3 class="text-2xl font-black mb-4">Latest Tweets about Dall·E</h3>
-            <div class="flex flex-nowrap items-start gap-2 overflow-x-auto">
+            <div class="carousel carousel-center p-4 space-x-4 bg-neutral rounded-box">
               <Resource
                 value={twitterData}
-                onPending={() => <div>Loading...</div>}
-                onRejected={() => <div>Error</div>}
                 onResolved={({ data, includes }) => (
                   <>
                     {data?.map((t) => {
@@ -152,12 +195,14 @@ export default component$(() => {
                         t.attachments?.media_keys?.includes(m.media_key ?? "")
                       );
                       return (
-                        <Card
-                          key={t.id}
-                          media={media}
-                          user={user}
-                          text={t.text}
-                        />
+                        <div key={t.id} class="carousel-item">
+                          <Card
+                            key={t.id}
+                            media={media}
+                            user={user}
+                            text={t.text}
+                          />
+                        </div>
                       );
                     })}
                   </>
