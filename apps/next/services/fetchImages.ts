@@ -2,7 +2,7 @@ import { ImagesResponse } from "openai";
 
 export async function fetchImages(
   term: string,
-  controller: AbortController
+  controller: AbortController | undefined = undefined
 ): Promise<ImagesResponse> {
   const response = await fetch(`/api/images`, {
     signal: controller?.signal,
