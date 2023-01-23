@@ -124,7 +124,7 @@ export default function Home({ twitter }: HomeProps) {
           <div className="mb-8">
             <h1 className="text-3xl font-black mb-2">Qwik & DALL·E Demo</h1>
             <h2>
-              Using Qwik to create this fully interactive website with Server
+              Using Next.js to create this fully interactive website with Server
               Side and Client Side hybrid rendering methods.
             </h2>
           </div>
