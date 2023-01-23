@@ -16,7 +16,8 @@ export default function Header() {
               target="_blank"
               rel="noreferrer"
             >
-              GitHub
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/github.svg" alt="Link to repository" className="w-8" />
             </a>
           </li>
         </ul>

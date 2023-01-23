@@ -12,13 +12,7 @@ export default component$(() => {
       <div class="flex-none">
         <ul class="menu menu-horizontal px-1">
           <li>
-            <a
-              href="https://github.com/DawChihLiou/qwik-vs-next"
-              target="_blank"
-              rel="noreferrer"
-            >
-              GitHub
-            </a>
+            <img src="/github.svg" alt="Link to repository" class="w-16" />
           </li>
         </ul>
       </div>
