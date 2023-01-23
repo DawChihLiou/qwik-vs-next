@@ -20,11 +20,6 @@
     "start": "vite --open --mode ssr",
     "qwik": "qwik"
   },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog-with-jiraid-detection"
-    }
-  },
   "devDependencies": {
     "@builder.io/qwik": "0.16.2",
     "@builder.io/qwik-city": "0.0.128",
@@ -34,7 +29,6 @@
     "@typescript-eslint/eslint-plugin": "5.48.0",
     "@typescript-eslint/parser": "5.48.0",
     "autoprefixer": "10.4.11",
-    "cz-conventional-changelog-with-jiraid-detection": "^1.0.4",
     "eslint": "8.31.0",
     "eslint-plugin-qwik": "0.16.2",
     "node-fetch": "3.3.0",
