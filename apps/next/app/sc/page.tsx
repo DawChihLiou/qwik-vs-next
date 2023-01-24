@@ -1,6 +1,8 @@
 import { Suspense } from "react";
+import TwitterCarousel from "~/components/TwitterCarousel";
+import TwitterSkeleton from "~/components/TwitterSkeleton";
 import { fetchTweets } from "~/services/fetchTweets";
-import Home from "./home";
+import Dalle from "./dalle";
 
 export default async function Page() {
   const tweets = await fetchTweets();
@@ -14,9 +16,16 @@ export default async function Page() {
           methods.
         </h2>
       </div>
-      <Suspense fallback={<p>Loading...</p>}>
-        <Home twitter={tweets} />
-      </Suspense>
+      <Dalle>
+        <div className="w-full">
+          <h3 className="text-2xl font-black mb-4">
+            Latest Tweets about Dall·E
+          </h3>
+          <Suspense fallback={<TwitterSkeleton />}>
+            <TwitterCarousel twitter={tweets} />
+          </Suspense>
+        </div>
+      </Dalle>
     </>
   );
 }

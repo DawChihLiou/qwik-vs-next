@@ -1,25 +1,16 @@
 "use client";
 
 import { ImagesResponse } from "openai";
-import { Suspense, useEffect, useReducer, useRef } from "react";
+import { ReactNode, useEffect, useReducer, useRef } from "react";
 import { Reducer } from "react";
-import {
-  tweetsRecentSearch,
-  TwitterResponse,
-} from "twitter-api-sdk/dist/types";
 import ImageGrid from "~/components/ImageGrid";
 import PromptList from "~/components/PromptList";
 import TextArea from "~/components/TextArea";
-import TwitterCarousel from "~/components/TwitterCarousel";
 import { images as imageFixture } from "~/constants/images";
 import { fetchImages } from "~/services/fetchImages";
 
-interface HomeProps {
-  twitter: {
-    data: TwitterResponse<tweetsRecentSearch>["data"];
-    includes: TwitterResponse<tweetsRecentSearch>["includes"];
-    errors: TwitterResponse<tweetsRecentSearch>["errors"];
-  };
+interface DalleProps {
+  children: ReactNode;
 }
 
 interface ImageState {
@@ -71,7 +62,7 @@ const reducer: Reducer<ImageState, ImageAction> = (state, action) => {
   return state;
 };
 
-export default function Home({ twitter }: HomeProps) {
+export default function Dalle({ children }: DalleProps) {
   const textarea = useRef<HTMLTextAreaElement>(null);
   const [images, dispatch] = useReducer(reducer, {
     prompt: "",
@@ -109,12 +100,7 @@ export default function Home({ twitter }: HomeProps) {
         <div className="mb-8">
           <ImageGrid loading={images.loading} data={images.data} />
         </div>
-        <div className="w-full">
-          <h3 className="text-2xl font-black mb-4">
-            Latest Tweets about Dall·E
-          </h3>
-          <TwitterCarousel twitter={twitter} />
-        </div>
+        {children}
       </div>
       <div className="flex flex-col">
         <h3 className="text-2xl font-black">Best DALL·E Prompts</h3>
