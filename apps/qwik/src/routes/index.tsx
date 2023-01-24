@@ -1,91 +1,33 @@
 import { component$, Resource, useResource$, useStore } from "@builder.io/qwik";
-import { useEndpoint } from "@builder.io/qwik-city";
-import type { RequestHandler, DocumentHead } from "@builder.io/qwik-city";
-import { Client } from "twitter-api-sdk";
-import type {
-  TwitterResponse,
-  tweetsRecentSearch,
-} from "twitter-api-sdk/dist/types";
+import type { DocumentHead } from "@builder.io/qwik-city";
 import { images } from "~/constants/images";
 import { prompts } from "~/constants/prompts";
 import Card from "~/components/card/card";
-
-interface ImageData {
-  created: number;
-  data: Record<"url", string>[];
-}
-
-export async function fetchImages(
-  term: string,
-  controller?: AbortController
-): Promise<ImageData> {
-  const response = await fetch(`http://localhost:5173/images`, {
-    signal: controller?.signal,
-    method: "POST",
-    body: JSON.stringify({
-      term,
-    }),
-  });
-  if (!response.ok) {
-    return { created: -1, data: [] };
-  }
-  const json = await response.json();
-  return json;
-}
-
-interface TwitterData {
-  data: TwitterResponse<tweetsRecentSearch>["data"];
-  includes: TwitterResponse<tweetsRecentSearch>["includes"];
-  errors: TwitterResponse<tweetsRecentSearch>["errors"];
-}
-
-export const onGet: RequestHandler<TwitterData> = async () => {
-  const client = new Client(import.meta.env.VITE_TWITTER_API_TOKEN as string);
-  const { data, includes, errors } = await client.tweets.tweetsRecentSearch({
-    query: "(#dalle OR #dalle2) has:media",
-    "tweet.fields": ["attachments"],
-    expansions: ["attachments.media_keys", "author_id"],
-    "media.fields": [
-      "alt_text",
-      "preview_image_url",
-      "promoted_metrics",
-      "public_metrics",
-      "type",
-      "url",
-      "height",
-      "width",
-    ],
-    "user.fields": ["name", "username", "profile_image_url", "url"],
-  });
-
-  return {
-    data,
-    includes,
-    errors,
-  };
-};
+import { fetchImages } from "~/services/fetchImages";
+import type { ImagesResponse } from "openai";
+import { fetchTweets } from "~/services/fetchTweets";
+import type { TwitterData } from "~/services/fetchTweets";
 
 export default component$(() => {
   const query = useStore({
     term: "",
   });
 
-  // server side rendering data
-  const twitterData = useEndpoint<TwitterData>();
-
-  // client side rendering data
-  const imageResource = useResource$<ImageData>(({ track, cleanup }) => {
+  const imageResource = useResource$<ImagesResponse>(({ track, cleanup }) => {
     track(() => query.term);
 
     const controller = new AbortController();
     cleanup(() => controller.abort());
 
     if (query.term === "") {
-      // controller.abort("empty query");
       return Promise.resolve(images);
     }
 
     return fetchImages(query.term, controller);
+  });
+
+  const tweetResource = useResource$<TwitterData>(() => {
+    return fetchTweets();
   });
 
   return (
@@ -142,7 +84,7 @@ export default component$(() => {
                         loading="lazy"
                         width="256"
                         height="256"
-                        className="rounded-box"
+                        class="rounded-box"
                       />
                     </div>
                   ))}
@@ -184,7 +126,16 @@ export default component$(() => {
             <h3 class="text-2xl font-black mb-4">Latest Tweets about Dall·E</h3>
             <div class="carousel carousel-center p-4 space-x-4 bg-neutral rounded-box">
               <Resource
-                value={twitterData}
+                value={tweetResource}
+                onPending={() => (
+                  <>
+                    {Array.from("1234").map((v) => (
+                      <div key={v} class="animate-pulse carousel-item">
+                        <div class="rounded-box bg-slate-700 h-48 w-80"></div>
+                      </div>
+                    ))}
+                  </>
+                )}
                 onResolved={({ data, includes }) => (
                   <>
                     {data?.map((t) => {
