@@ -1,0 +1,12 @@
+FROM node:18-alpine
+WORKDIR /app
+
+COPY . ./
+
+# building the app
+RUN yarn --frozen-lockfile
+
+RUN yarn build
+
+# Running the app
+CMD [ "yarn", "start" ]
